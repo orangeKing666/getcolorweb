@@ -3,1069 +3,736 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>前端配色系统</title>
+    <title>交互式配色系统</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f7fa;
-            color: #333;
-            line-height: 1.6;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-        
-        header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 25px 30px;
-            text-align: center;
+            min-height: 100vh;
+            padding: 20px;
         }
-        
-        h1 {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-        }
-        
-        .subtitle {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-        
-        .main-content {
-            display: flex;
-            flex-wrap: wrap;
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
             padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
-        
-        .control-section {
-            flex: 1;
-            min-width: 300px;
-            padding: 20px;
-            border-right: 1px solid #eee;
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
         }
-        
-        .preview-section {
-            flex: 2;
-            min-width: 400px;
-            padding: 20px;
+
+        h1 {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        
-        .control-group {
-            margin-bottom: 25px;
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
         }
-        
-        .group-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #2c3e50;
-            display: flex;
-            align-items: center;
-        }
-        
-        .control-row {
-            margin-bottom: 12px;
-        }
-        
-        .control-label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 500;
-            color: #555;
-        }
-        
-        select, input[type="range"], button {
-            width: 100%;
-            padding: 8px 12px;
-            border: 2px solid #e1e5e9;
-            border-radius: 6px;
-            font-size: 14px;
-        }
-        
-        .color-inputs {
+
+        .main-content {
             display: grid;
-            gap: 12px;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            margin-bottom: 30px;
         }
-        
-        .color-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
         }
-        
-        .color-label {
-            width: 140px;
-            font-weight: 500;
-            color: #555;
+
+        .color-picker-section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
         }
-        
-        .color-display {
-            width: 40px;
-            height: 40px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+
+        .color-palette {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000
+            );
             position: relative;
+            cursor: pointer;
             overflow: hidden;
         }
-        
-        .color-display:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-        
-        .color-value {
-            flex: 1;
-            padding: 8px 12px;
-            border: 2px solid #e1e5e9;
-            border-radius: 6px;
-            font-family: monospace;
-            font-size: 14px;
-            background: #fafafa;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .color-value:hover {
-            background: #f0f0f0;
-            border-color: #cbd5e0;
-        }
-        
-        .color-wheel {
-            width: 100%;
-            height: 200px;
-            background: conic-gradient(
-                red, yellow, lime, cyan, blue, magenta, red
-            );
-            border-radius: 50%;
-            cursor: pointer;
-            margin: 20px 0;
-            position: relative;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        }
-        
-        .wheel-center {
+
+        .color-center {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 30px;
-            height: 30px;
+            width: 120px;
+            height: 120px;
             background: white;
-            border: 3px solid #fff;
             border-radius: 50%;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            cursor: pointer;
-        }
-        
-        .preview-grid {
-            display: grid;
-            gap: 20px;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        }
-        
-        .preview-card {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            border: 1px solid #eee;
-        }
-        
-        .card-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #2c3e50;
-        }
-        
-        .button-preview {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            min-width: 120px;
-        }
-        
-        .btn-primary {
-            background-color: #3b82f6;
-            color: #1f2937;
-        }
-        
-        .btn-primary:hover {
-            background-color: #e5e7eb;
-            border-color: #9ca3af;
-        }
-        
-        .btn-secondary {
-            background-color: #10b981;
-            color: #1f2937;
-        }
-        
-        .btn-secondary:hover {
-            background-color: #e5e7eb;
-            border-color: #9ca3af;
-        }
-        
-        .document-preview {
-            background-color: #f8fafc;
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid #d1d5db;
-        }
-        
-        .doc-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 15px 20px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-        }
-        
-        .doc-content {
-            color: #1f2937;
-            line-height: 1.8;
-        }
-        
-        .gradient-preview {
-            height: 100px;
-            border-radius: 8px;
-            margin: 15px 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            cursor: pointer;
+        }
+
+        .selected-color {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .color-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .scheme-controls {
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
             font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            color: #555;
         }
-        
-        .primary-gradient {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 15px;
         }
-        
-        .secondary-gradient {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+
+        .color-scheme-section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
         }
-        
+
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .color-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid #f0f0f0;
+            transition: all 0.3s ease;
+        }
+
+        .color-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .color-card h3 {
+            margin-bottom: 15px;
+            color: #555;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .color-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+
+        .color-item:hover {
+            background: #e9ecef;
+        }
+
+        .color-preview {
+            width: 45px;
+            height: 45px;
+            border-radius: 8px;
+            margin-right: 15px;
+            border: 2px solid #ddd;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .color-preview:hover {
+            transform: scale(1.1);
+            border-color: #667eea;
+        }
+
+        .color-info {
+            flex: 1;
+        }
+
+        .color-name {
+            font-weight: bold;
+            margin-bottom: 3px;
+            color: #333;
+        }
+
+        .color-value {
+            font-size: 0.9em;
+            color: #666;
+            font-family: monospace;
+        }
+
+        .gradient-display {
+            height: 60px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+        }
+
+        .usage-examples {
+            margin-top: 40px;
+        }
+
+        .example-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .example-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .example-card h3 {
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .example-element {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border: 2px solid;
+        }
+
+        .btn-primary {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
         .action-buttons {
             display: flex;
             gap: 15px;
-            margin-top: 30px;
+            margin-top: 20px;
             flex-wrap: wrap;
         }
-        
-        .btn-export {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
+
+        .action-btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px;
             border: none;
-            padding: 12px 24px;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
-            font-weight: 500;
+            font-size: 16px;
             transition: all 0.3s ease;
         }
-        
-        .btn-export:hover {
+
+        .action-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(16,185,129,0.3);
         }
-        
-        .btn-reset {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+
+        .copy-btn {
+            background: #667eea;
             color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s ease;
         }
-        
-        .btn-reset:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(239,68,68,0.3);
+
+        .export-btn {
+            background: #28a745;
+            color: white;
         }
-        
+
+        .random-btn {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .status-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #333;
+            color: white;
+            padding: 12px 20px;
+            text-align: center;
+            z-index: 1000;
+            font-size: 14px;
+        }
+
         .notification {
             position: fixed;
             top: 20px;
             right: 20px;
-            padding: 12px 20px;
-            background: #10b981;
+            background: #28a745;
             color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            z-index: 1001;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .hex-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hex-input input {
+            flex: 1;
+        }
+
+        .hex-input button {
+            padding: 10px 15px;
+            background: #667eea;
+            color: white;
+            border: none;
             border-radius: 6px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transform: translateX(400px);
-            transition: transform 0.3s ease;
-        }
-        
-        .notification.show {
-            transform: translateX(0);
-        }
-        
-        .contrast-info {
-            background: #f0f9ff;
-            padding: 12px;
-            border-radius: 6px;
-            margin-top: 10px;
-            border-left: 4px solid #3b82f6;
-        }
-        
-        .contrast-ratio {
-            font-weight: bold;
-            color: #0ea5e9;
-        }
-        
-        @media (max-width: 768px) {
-            .main-content {
-                flex-direction: column;
-            }
-            
-            .control-section {
-                border-right: none;
-                border-bottom: 1px solid #eee;
-            }
-            
-            .action-buttons {
-                justify-content: center;
-            }
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🎨 前端配色系统</h1>
-            <p class="subtitle">专业级配色方案设计工具 | 支持实时预览与导出</p>
+            <h1>🎨 交互式配色系统</h1>
+            <p class="subtitle">基于主色调的智能配色方案生成器</p>
         </header>
-        
+
         <div class="main-content">
-            <div class="control-section">
-                <div class="control-group">
-                    <h3 class="group-title">⚙️ 配色控制</h3>
-                    
-                    <div class="control-row">
-                        <label class="control-label">配色策略</label>
-                        <select id="colorStrategy">
-                            <option value="complementary">互补色</option>
-                            <option value="analogous">邻近色</option>
-                            <option value="triadic">三元色</option>
-                            <option value="monochromatic">单色系</option>
-                            <option value="tetradic">四元色</option>
-                            <option value="custom">自定义</option>
-                        </select>
-                    </div>
-                    
-                    <div class="control-row">
-                        <label class="control-label">对比度级别</label>
-                        <select id="contrastLevel">
-                            <option value="low">低对比度</option>
-                            <option value="medium" selected>中对比度</option>
-                            <option value="high">高对比度</option>
-                            <option value="wcag_aa">WCAG AA (4.5:1)</option>
-                            <option value="wcag_aaa">WCAG AAA (7:1)</option>
-                        </select>
-                    </div>
-                    
-                    <div class="control-row">
-                        <label class="control-label">饱和度调整: <span id="saturationValue">70</span>%</label>
-                        <input type="range" id="saturationSlider" min="0" max="100" value="70">
-                    </div>
-                    
-                    <div class="control-row">
-                        <label class="control-label">亮度调整: <span id="lightnessValue">50</span>%</label>
-                        <input type="range" id="lightnessSlider" min="0" max="100" value="50">
+            <div class="color-picker-section">
+                <h2>🎨 选择主色调</h2>
+                <div class="color-palette" id="colorPalette">
+                    <div class="color-center">
+                        <div class="selected-color" id="selectedColor" style="background-color: #667eea;"></div>
                     </div>
                 </div>
                 
-                <div class="control-group">
-                    <h3 class="group-title">🎨 色轮选择器</h3>
-                    <div class="color-wheel" id="colorWheel">
-                        <div class="wheel-center"></div>
-                    </div>
-                    <p style="text-align: center; color: #666; font-size: 14px;">点击色轮选择主色调</p>
+                <div class="hex-input">
+                    <input type="text" id="hexInput" class="color-input" value="#667eea" placeholder="输入HEX颜色值">
+                    <button onclick="applyHexColor()">✓</button>
                 </div>
-                
-                <div class="control-group">
-                    <h3 class="group-title">🎨 颜色配置</h3>
-                    <div class="color-inputs">
-                        <div class="color-item">
-                            <span class="color-label">主色</span>
-                            <div class="color-display" data-target="primaryColor" style="background: #3b82f6;"></div>
-                            <input type="text" class="color-value" value="#3b82f6" data-target="primaryColor">
-                        </div>
-                        <div class="color-item">
-                            <span class="color-label">辅助色</span>
-                            <div class="color-display" data-target="secondaryColor" style="background: #10b981;"></div>
-                            <input type="text" class="color-value" value="#10b981" data-target="secondaryColor">
-                        </div>
-                        <div class="color-item">
-                            <span class="color-label">背景色</span>
-                            <div class="color-display" data-target="bgColor" style="background: #f8fafc;"></div>
-                            <input type="text" class="color-value" value="#f8fafc" data-target="bgColor">
-                        </div>
-                        <div class="color-item">
-                            <span class="color-label">文字色</span>
-                            <div class="color-display" data-target="textColor" style="background: #1f2937;"></div>
-                            <input type="text" class="color-value" value="#1f2937" data-target="textColor">
-                        </div>
-                    </div>
+
+                <div class="scheme-controls">
+                    <label for="schemeType">配色策略:</label>
+                    <select id="schemeType" onchange="updateColorScheme()">
+                        <option value="analogous">邻近色系</option>
+                        <option value="complementary">互补色系</option>
+                        <option value="triadic">三角色系</option>
+                        <option value="tetradic">四角色系</option>
+                        <option value="monochromatic">单色渐变</option>
+                        <option value="split-complementary">分裂互补</option>
+                        <option value="square">方形配色</option>
+                        <option value="custom">自定义</option>
+                    </select>
+
+                    <label for="contrastLevel">对比度级别:</label>
+                    <select id="contrastLevel" onchange="updateColorScheme()">
+                        <option value="low">低对比度</option>
+                        <option value="medium" selected>中等对比度</option>
+                        <option value="high">高对比度</option>
+                    </select>
                 </div>
-                
-                <div class="control-group">
-                    <h3 class="group-title">📊 对比度信息</h3>
-                    <div class="contrast-info">
-                        <p>当前文本与背景对比度: <span class="contrast-ratio" id="contrastRatio">4.5:1</span></p>
-                        <p>符合: <span id="complianceStatus">WCAG AA 标准</span></p>
-                        <p>建议: <span id="contrastSuggestion">对比度适中，适合阅读</span></p>
-                    </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn random-btn" onclick="generateRandomColor()">🎲 随机颜色</button>
+                    <button class="action-btn copy-btn" onclick="copyCurrentScheme()">📋 复制方案</button>
+                    <button class="action-btn export-btn" onclick="exportScheme()">💾 导出方案</button>
                 </div>
             </div>
-            
-            <div class="preview-section">
-                <div class="preview-grid">
-                    <div class="preview-card">
-                        <h4 class="card-title">按钮预览</h4>
-                        <div class="button-preview">
-                            <button class="btn btn-primary" id="primaryBtn">主要按钮</button>
-                            <button class="btn btn-secondary" id="secondaryBtn">次要按钮</button>
-                        </div>
-                    </div>
-                    
-                    <div class="preview-card">
-                        <h4 class="group-title">渐变预览</h4>
-                        <div class="gradient-preview primary-gradient" id="primaryGradient">
-                            主渐变色
-                        </div>
-                        <div class="gradient-preview secondary-gradient" id="secondaryGradient">
-                            辅渐变色
-                        </div>
-                    </div>
-                    
-                    <div class="preview-card">
-                        <h4 class="card-title">文档预览</h4>
-                        <div class="document-preview" id="documentPreview">
-                            <div class="doc-header" id="docHeader">文档头部</div>
-                            <div class="doc-content" id="docContent">
-                                这是一个文档预览示例，展示了所选配色方案在实际应用中的效果。文字颜色、背景色以及边框色都按照当前配置进行显示。
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="preview-card">
-                        <h4 class="card-title">背景预览</h4>
-                        <div id="bgPreview" style="padding: 20px; border-radius: 8px;">
-                            <p id="bgPreviewText">这是推荐的背景色配文字颜色的组合效果展示。</p>
-                            <p id="bgPreviewInfo1" style="margin-top: 10px;">背景色: <code>var(--bg-color)</code></p>
-                            <p id="bgPreviewText2">文字色: <code>var(--text-color)</code></p>
-                        </div>
-                    </div>
+
+            <div class="color-scheme-section">
+                <h2>🎨 配色方案</h2>
+                <div class="color-grid" id="colorGrid">
+                    <!-- Color cards will be generated here -->
                 </div>
-                
-                <div class="action-buttons">
-                    <button class="btn-export" onclick="exportColors()">导出配色方案</button>
-                    <button class="btn-reset" onclick="resetColors()">重置默认配色</button>
+            </div>
+        </div>
+
+        <div class="usage-examples">
+            <h2>💡 实际应用示例</h2>
+            <div class="example-row">
+                <div class="example-card">
+                    <h3>按钮样式</h3>
+                    <button class="btn-primary" id="primaryBtn" style="background: #667eea; color: white;">主要按钮</button>
+                    <button class="btn-primary" id="secondaryBtn" style="background: #764ba2; color: white;">次要按钮</button>
+                    <button class="btn-primary" id="accentBtn" style="background: #f093fb; color: white;">强调按钮</button>
+                </div>
+                <div class="example-card">
+                    <h3>渐变效果</h3>
+                    <div class="gradient-display" id="primaryGradient"></div>
+                    <div class="gradient-display" id="accentGradient"></div>
+                    <div class="gradient-display" id="textGradient"></div>
+                </div>
+                <div class="example-card">
+                    <h3>卡片布局</h3>
+                    <div class="example-element" id="exampleCard1" style="background: #ffffff; color: #333333; border-color: #dddddd;">
+                        标准卡片内容
+                    </div>
+                    <div class="example-element" id="exampleCard2" style="background: #f8f9fa; color: #495057; border-color: #ced4da;">
+                        浅色卡片内容
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    
-    <div class="notification" id="notification">颜色已复制到剪贴板！</div>
+
+    <div class="status-bar" id="statusBar">
+        就绪 | 当前主色调: #667eea
+    </div>
 
     <script>
-        // 默认颜色配置
-        const defaultColors = {
-            primaryColor: '#3b82f6',
-            secondaryColor: '#10b981',
-            bgColor: '#f8fafc',
-            textColor: '#1f2937'
-        };
-        
-        let currentColors = {...defaultColors};
-        let colorStrategy = 'complementary';
-        let contrastLevel = 'medium';
-        let saturation = 70;
-        let lightness = 50;
-        
-        // 初始化
-        function init() {
-            updateAllColors();
-            setupEventListeners();
+        let currentMainColor = '#667eea';
+
+        // 初始化系统
+        function initSystem() {
+            setupColorPicker();
+            updateColorScheme();
         }
-        
-        // 设置事件监听
-        function setupEventListeners() {
-            // 配色策略选择
-            document.getElementById('colorStrategy').addEventListener('change', function() {
-                colorStrategy = this.value;
-                applyColorStrategy();
-            });
-            
-            // 对比度级别选择
-            document.getElementById('contrastLevel').addEventListener('change', function() {
-                contrastLevel = this.value;
-                adjustContrast();
-            });
-            
-            // 饱和度滑块
-            document.getElementById('saturationSlider').addEventListener('input', function() {
-                saturation = parseInt(this.value);
-                document.getElementById('saturationValue').textContent = saturation;
-                applySaturationLightnessAdjustment();
-            });
-            
-            // 亮度滑块
-            document.getElementById('lightnessSlider').addEventListener('input', function() {
-                lightness = parseInt(this.value);
-                document.getElementById('lightnessValue').textContent = lightness;
-                applySaturationLightnessAdjustment();
-            });
-            
-            // 颜色输入框变化
-            document.querySelectorAll('.color-value').forEach(input => {
-                input.addEventListener('change', function() {
-                    const target = this.dataset.target;
-                    const value = this.value;
-                    if (isValidColor(value)) {
-                        currentColors[target] = value;
-                        updateColorDisplay(target, value);
-                        updateCSSVariables();
-                        updatePreviewElements();
-                        updateContrastInfo();
-                    } else {
-                        this.value = currentColors[target];
-                    }
-                });
-            });
-            
-            // 颜色显示区域点击（复制颜色）
-            document.querySelectorAll('.color-display').forEach(display => {
-                display.addEventListener('click', function() {
-                    const target = this.dataset.target;
-                    copyToClipboard(currentColors[target]);
-                    showNotification('颜色已复制到剪贴板！');
-                });
-            });
-            
-            // 颜色值点击（复制颜色）
-            document.querySelectorAll('.color-value').forEach(input => {
-                input.addEventListener('click', function() {
-                    copyToClipboard(this.value);
-                    showNotification('颜色已复制到剪贴板！');
-                });
-            });
-            
-            // 色轮点击
-            document.getElementById('colorWheel').addEventListener('click', function(e) {
+
+        // 设置颜色选择器
+        function setupColorPicker() {
+            const palette = document.getElementById('colorPalette');
+            const center = document.querySelector('.color-center');
+            const selectedColor = document.getElementById('selectedColor');
+
+            palette.addEventListener('click', function(e) {
                 const rect = this.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                const dx = x - centerX;
-                const dy = y - centerY;
-                const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-                const hue = (angle + 90 + 360) % 360; // 调整角度
-                
-                // 生成HSL颜色
-                const color = hslToHex(hue, saturation, lightness);
-                currentColors.primaryColor = color;
-                updateColorDisplay('primaryColor', color);
-                updateCSSVariables();
-                updatePreviewElements();
-                updateContrastInfo();
-                
-                // 根据策略生成其他颜色
-                applyColorStrategy();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                const angle = Math.atan2(y, x) * 180 / Math.PI;
+                const distance = Math.sqrt(x*x + y*y);
+                const radius = rect.width / 2;
+
+                if (distance <= radius) {
+                    const hue = (angle + 90 + 360) % 360; // 调整角度以匹配色环
+                    const saturation = Math.min(distance / (radius * 0.8), 1) * 100;
+                    const lightness = 60; // 固定亮度
+
+                    const color = hslToHex(hue, saturation, lightness);
+                    currentMainColor = color;
+                    
+                    selectedColor.style.backgroundColor = color;
+                    document.getElementById('hexInput').value = color;
+                    updateColorScheme();
+                    updateStatusBar();
+                }
             });
-        }
-        
-        // 应用配色策略
-        function applyColorStrategy() {
-            const primaryHsl = hexToHsl(currentColors.primaryColor);
-            let newColors = {...currentColors};
-            
-            switch(colorStrategy) {
-                case 'complementary':
-                    // 互补色（色相相差180度）
-                    const complementaryHue = (primaryHsl.h + 180) % 360;
-                    newColors.secondaryColor = hslToHex(complementaryHue, saturation, lightness);
-                    break;
-                    
-                case 'analogous':
-                    // 邻近色（色相相差30度左右）
-                    const analogousHue1 = (primaryHsl.h + 30) % 360;
-                    const analogousHue2 = (primaryHsl.h - 30 + 360) % 360;
-                    newColors.secondaryColor = hslToHex(analogousHue1, saturation, lightness);
-                    break;
-                    
-                case 'triadic':
-                    // 三元色（色相相差120度）
-                    const triadicHue = (primaryHsl.h + 120) % 360;
-                    newColors.secondaryColor = hslToHex(triadicHue, saturation, lightness);
-                    break;
-                    
-                case 'monochromatic':
-                    // 单色系（相同色相，不同饱和度和亮度）
-                    newColors.secondaryColor = hslToHex(primaryHsl.h, Math.max(0, saturation - 20), Math.min(100, lightness + 20));
-                    break;
-                    
-                case 'tetradic':
-                    // 四元色（两组互补色）
-                    const tetraHue1 = (primaryHsl.h + 90) % 360;
-                    newColors.secondaryColor = hslToHex(tetraHue1, saturation, lightness);
-                    break;
-            }
-            
-            // 更新颜色
-            currentColors = newColors;
-            updateAllColors();
-            updateContrastInfo();
-        }
-        
-        // 调整对比度
-        function adjustContrast() {
-            const bgHsl = hexToHsl(currentColors.bgColor);
-            const textHsl = hexToHsl(currentColors.textColor);
-            
-            let newBgHsl = {...bgHsl};
-            let newTextHsl = {...textHsl};
-            
-            switch(contrastLevel) {
-                case 'low':
-                    // 降低对比度
-                    newTextHsl.l = Math.min(80, bgHsl.l + 20);
-                    newBgHsl.l = Math.max(20, bgHsl.l - 20);
-                    break;
-                    
-                case 'medium':
-                    // 中等对比度
-                    newTextHsl.l = bgHsl.l > 50 ? 20 : 80;
-                    break;
-                    
-                case 'high':
-                    // 高对比度
-                    newTextHsl.l = bgHsl.l > 50 ? 10 : 90;
-                    break;
-                    
-                case 'wcag_aa':
-                    // WCAG AA 标准 (4.5:1)
-                    const aaRatio = getContrastRatioForAA(bgHsl, textHsl);
-                    newTextHsl.l = aaRatio.textL;
-                    newBgHsl.l = aaRatio.bgL;
-                    break;
-                    
-                case 'wcag_aaa':
-                    // WCAG AAA 标准 (7:1)
-                    const aaaRatio = getContrastRatioForAAA(bgHsl, textHsl);
-                    newTextHsl.l = aaaRatio.textL;
-                    newBgHsl.l = aaaRatio.bgL;
-                    break;
-            }
-            
-            currentColors.bgColor = hslToHex(newBgHsl.h, newBgHsl.s, newBgHsl.l);
-            currentColors.textColor = hslToHex(newTextHsl.h, newTextHsl.s, newTextHsl.l);
-            
-            updateAllColors();
-            updateContrastInfo();
-        }
-        
-        // 获取满足WCAG AA标准的对比度
-        function getContrastRatioForAA(bgHsl, textHsl) {
-            // 简化的对比度调整算法
-            const bgLum = getRelativeLuminance(bgHsl);
-            const textLum = getRelativeLuminance(textHsl);
-            const currentRatio = (Math.max(bgLum, textLum) + 0.05) / (Math.min(bgLum, textLum) + 0.05);
-            
-            if (currentRatio >= 4.5) {
-                return { bgL: bgHsl.l, textL: textHsl.l };
-            }
-            
-            // 调整亮度以达到最低对比度
-            if (bgLum > textLum) {
-                // 背景亮，文字暗
-                return { bgL: bgHsl.l, textL: Math.max(0, textHsl.l - 30) };
-            } else {
-                // 背景暗，文字亮
-                return { bgL: bgHsl.l, textL: Math.min(100, textHsl.l + 30) };
-            }
-        }
-        
-        // 获取满足WCAG AAA标准的对比度
-        function getContrastRatioForAAA(bgHsl, textHsl) {
-            // 简化的对比度调整算法
-            const bgLum = getRelativeLuminance(bgHsl);
-            const textLum = getRelativeLuminance(textHsl);
-            const currentRatio = (Math.max(bgLum, textLum) + 0.05) / (Math.min(bgLum, textLum) + 0.05);
-            
-            if (currentRatio >= 7) {
-                return { bgL: bgHsl.l, textL: textHsl.l };
-            }
-            
-            // 调整亮度以达到AAA对比度
-            if (bgLum > textLum) {
-                // 背景亮，文字暗
-                return { bgL: bgHsl.l, textL: Math.max(0, textHsl.l - 40) };
-            } else {
-                // 背景暗，文字亮
-                return { bgL: bgHsl.l, textL: Math.min(100, textHsl.l + 40) };
-            }
-        }
-        
-        // 计算相对亮度
-        function getRelativeLuminance(hsl) {
-            // 将HSL转换为RGB
-            const rgb = hslToRgb(hsl.h, hsl.s, hsl.l);
-            // 计算相对亮度
-            const r = rgb.r / 255;
-            const g = rgb.g / 255;
-            const b = rgb.b / 255;
-            
-            const RsRGB = r <= 0.03928 ? r / 12.92 : Math.pow((r + 0.055) / 1.055, 2.4);
-            const GsRGB = g <= 0.03928 ? g / 12.92 : Math.pow((g + 0.055) / 1.055, 2.4);
-            const BsRGB = b <= 0.03928 ? b / 12.92 : Math.pow((b + 0.055) / 1.055, 2.4);
-            
-            return 0.2126 * RsRGB + 0.7152 * GsRGB + 0.0722 * BsRGB;
-        }
-        
-        // 应用饱和度和亮度调整
-        function applySaturationLightnessAdjustment() {
-            // 重新生成颜色
-            applyColorStrategy();
-        }
-        
-        // 更新颜色显示
-        function updateColorDisplay(target, color) {
-            const displays = document.querySelectorAll(`[data-target="${target}"]`);
-            displays.forEach(display => {
-                if (display.classList.contains('color-display')) {
-                    display.style.backgroundColor = color;
-                } else if (display.classList.contains('color-value')) {
-                    display.value = color;
+
+            selectedColor.addEventListener('click', function() {
+                const color = prompt('请输入HEX颜色值:', currentMainColor);
+                if (color && isValidHex(color)) {
+                    currentMainColor = color.toUpperCase();
+                    selectedColor.style.backgroundColor = currentMainColor;
+                    document.getElementById('hexInput').value = currentMainColor;
+                    updateColorScheme();
+                    updateStatusBar();
                 }
             });
         }
-        
-        // 更新所有颜色显示
-        function updateAllColors() {
-            Object.keys(currentColors).forEach(key => {
-                updateColorDisplay(key, currentColors[key]);
-            });
-            updateCSSVariables();
-            updatePreviewElements();
+
+        // 验证HEX颜色值
+        function isValidHex(hex) {
+            return /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(hex);
         }
-        
-        // 更新CSS变量
-        function updateCSSVariables() {
-            const root = document.documentElement;
-            Object.keys(currentColors).forEach(key => {
-                root.style.setProperty(`--${key}`, currentColors[key]);
-            });
-        }
-        
-        // 更新预览元素
-        function updatePreviewElements() {
-            // 更新按钮
-            document.getElementById('primaryBtn').style.backgroundColor = currentColors.primaryColor;
-            document.getElementById('primaryBtn').style.color = currentColors.textColor;
-            document.getElementById('primaryBtn').onmouseover = function() {
-                this.style.backgroundColor = currentColors.bgColor;
-                this.style.borderColor = currentColors.textColor;
-            };
-            document.getElementById('primaryBtn').onmouseout = function() {
-                this.style.backgroundColor = currentColors.primaryColor;
-                this.style.borderColor = '';
-            };
-            
-            document.getElementById('secondaryBtn').style.backgroundColor = currentColors.secondaryColor;
-            document.getElementById('secondaryBtn').style.color = currentColors.textColor;
-            document.getElementById('secondaryBtn').onmouseover = function() {
-                this.style.backgroundColor = currentColors.bgColor;
-                this.style.borderColor = currentColors.textColor;
-            };
-            document.getElementById('secondaryBtn').onmouseout = function() {
-                this.style.backgroundColor = currentColors.secondaryColor;
-                this.style.borderColor = '';
-            };
-            
-            // 更新渐变
-            document.getElementById('primaryGradient').style.background = 
-                `linear-gradient(135deg, ${currentColors.primaryColor} 0%, ${adjustBrightness(currentColors.primaryColor, 20)} 100%)`;
-            document.getElementById('secondaryGradient').style.background = 
-                `linear-gradient(135deg, ${currentColors.secondaryColor} 0%, ${adjustBrightness(currentColors.secondaryColor, 20)} 100%)`;
-            
-            // 更新文档预览
-            document.getElementById('documentPreview').style.backgroundColor = currentColors.bgColor;
-            document.getElementById('docContent').style.color = currentColors.textColor;
-            document.getElementById('docHeader').style.background = 
-                `linear-gradient(135deg, ${currentColors.primaryColor} 0%, ${adjustBrightness(currentColors.primaryColor, 20)} 100%)`;
-            
-            // 更新背景预览
-            document.getElementById('bgPreview').style.backgroundColor = currentColors.bgColor;
-            document.getElementById('bgPreviewText').style.color = currentColors.textColor;
-            document.getElementById('bgPreviewInfo1').style.color = currentColors.textColor;
-            document.getElementById('bgPreviewText2').style.color = currentColors.textColor;
-        }
-        
-        // 调整亮度
-        function adjustBrightness(hex, percent) {
-            const hsl = hexToHsl(hex);
-            const newL = Math.min(100, Math.max(0, hsl.l + percent));
-            return hslToHex(hsl.h, hsl.s, newL);
-        }
-        
-        // 更新对比度信息
-        function updateContrastInfo() {
-            const bgLum = getRelativeLuminance(hexToHsl(currentColors.bgColor));
-            const textLum = getRelativeLuminance(hexToHsl(currentColors.textColor));
-            const ratio = ((Math.max(bgLum, textLum) + 0.05) / (Math.min(bgLum, textLum) + 0.05)).toFixed(2);
-            
-            document.getElementById('contrastRatio').textContent = `${ratio}:1`;
-            
-            let compliance = '';
-            let suggestion = '';
-            
-            if (ratio >= 7) {
-                compliance = 'WCAG AAA 标准';
-                suggestion = '对比度优秀，适合所有人阅读';
-            } else if (ratio >= 4.5) {
-                compliance = 'WCAG AA 标准';
-                suggestion = '对比度良好，适合正常阅读';
+
+        // 应用HEX颜色
+        function applyHexColor() {
+            const hexInput = document.getElementById('hexInput').value;
+            if (isValidHex(hexInput)) {
+                currentMainColor = hexInput.toUpperCase();
+                document.getElementById('selectedColor').style.backgroundColor = currentMainColor;
+                updateColorScheme();
+                updateStatusBar();
             } else {
-                compliance = '不符合无障碍标准';
-                suggestion = '对比度过低，建议调整以提高可读性';
+                alert('请输入有效的HEX颜色值！');
             }
-            
-            document.getElementById('complianceStatus').textContent = compliance;
-            document.getElementById('contrastSuggestion').textContent = suggestion;
         }
-        
-        // 重置颜色
-        function resetColors() {
-            currentColors = {...defaultColors};
-            colorStrategy = 'complementary';
-            contrastLevel = 'medium';
-            saturation = 70;
-            lightness = 50;
-            
-            // 更新UI
-            document.getElementById('colorStrategy').value = colorStrategy;
-            document.getElementById('contrastLevel').value = contrastLevel;
-            document.getElementById('saturationSlider').value = saturation;
-            document.getElementById('lightnessSlider').value = lightness;
-            document.getElementById('saturationValue').textContent = saturation;
-            document.getElementById('lightnessValue').textContent = lightness;
-            
-            updateAllColors();
-            updateContrastInfo();
-            showNotification('配色方案已重置！');
+
+        // 生成随机颜色
+        function generateRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            currentMainColor = color;
+            document.getElementById('selectedColor').style.backgroundColor = color;
+            document.getElementById('hexInput').value = color;
+            updateColorScheme();
+            updateStatusBar();
         }
-        
-        // 导出配色方案
-        function exportColors() {
-            const colorScheme = `
-配色方案导出报告
-================
 
-配色策略: ${getStrategyName(colorStrategy)}
-对比度级别: ${getContrastLevelName(contrastLevel)}
-饱和度: ${saturation}%
-亮度: ${lightness}%
-
-主色: ${currentColors.primaryColor}
-辅助色: ${currentColors.secondaryColor}
-背景色: ${currentColors.bgColor}
-文字色: ${currentColors.textColor}
-
-对比度信息:
-- 当前对比度: ${(getRelativeLuminance(hexToHsl(currentColors.bgColor)) + 0.05) / (getRelativeLuminance(hexToHsl(currentColors.textColor)) + 0.05).toFixed(2)}:1
-- 符合标准: ${document.getElementById('complianceStatus').textContent}
-
-CSS变量使用方式:
-:root {
-  --primaryColor: ${currentColors.primaryColor};
-  --secondaryColor: ${currentColors.secondaryColor};
-  --bgColor: ${currentColors.bgColor};
-  --textColor: ${currentColors.textColor};
-}
-            `.trim();
-            
-            // 创建下载链接
-            const blob = new Blob([colorScheme], { type: 'text/plain;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = '配色方案.txt';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            showNotification('配色方案已导出！');
+        // 更新状态栏
+        function updateStatusBar() {
+            document.getElementById('statusBar').textContent = 
+                `就绪 | 当前主色调: ${currentMainColor}`;
         }
-        
-        // 获取策略名称
-        function getStrategyName(strategy) {
+
+        // 更新配色方案
+        function updateColorScheme() {
+            const schemeType = document.getElementById('schemeType').value;
+            const contrastLevel = document.getElementById('contrastLevel').value;
+            
+            let scheme = generateColorScheme(currentMainColor, schemeType, contrastLevel);
+            
+            displayColorScheme(scheme);
+            updateExamples(scheme);
+        }
+
+        // 生成配色方案
+        function generateColorScheme(mainColor, schemeType, contrastLevel) {
+            const [h, s, l] = hexToHsl(mainColor);
+            const contrastFactor = getContrastFactor(contrastLevel);
+            
+            let scheme = {
+                primary: mainColor,
+                name: getSchemeName(schemeType)
+            };
+
+            switch(schemeType) {
+                case 'analogous':
+                    scheme.secondary1 = hslToHex((h + 30) % 360, s, l);
+                    scheme.secondary2 = hslToHex((h - 30 + 360) % 360, s, l);
+                    break;
+                case 'complementary':
+                    scheme.secondary1 = hslToHex((h + 180) % 360, s, l);
+                    scheme.secondary2 = hslToHex((h + 150) % 360, s * 0.8, l * 0.9);
+                    break;
+                case 'triadic':
+                    scheme.secondary1 = hslToHex((h + 120) % 360, s, l);
+                    scheme.secondary2 = hslToHex((h + 240) % 360, s, l);
+                    break;
+                case 'tetradic':
+                    scheme.secondary1 = hslToHex((h + 60) % 360, s, l);
+                    scheme.secondary2 = hslToHex((h + 180) % 360, s, l);
+                    scheme.accent = hslToHex((h + 240) % 360, s, l);
+                    break;
+                case 'monochromatic':
+                    scheme.secondary1 = hslToHex(h, s, Math.max(10, l - 20 * contrastFactor));
+                    scheme.secondary2 = hslToHex(h, s, Math.min(90, l + 20 * contrastFactor));
+                    scheme.accent = hslToHex(h, s * 0.7, l);
+                    break;
+                case 'split-complementary':
+                    scheme.secondary1 = hslToHex((h + 150) % 360, s, l);
+                    scheme.secondary2 = hslToHex((h + 210) % 360, s, l);
+                    break;
+                case 'square':
+                    scheme.secondary1 = hslToHex((h + 90) % 360, s, l);
+                    scheme.secondary2 = hslToHex((h + 180) % 360, s, l);
+                    scheme.accent = hslToHex((h + 270) % 360, s, l);
+                    break;
+                case 'custom':
+                    // 自定义方案，保持原有逻辑
+                    scheme.secondary1 = adjustLightness(mainColor, -20 * contrastFactor);
+                    scheme.secondary2 = adjustLightness(mainColor, 20 * contrastFactor);
+                    scheme.accent = getComplementaryColor(mainColor);
+                    break;
+            }
+
+            // 添加通用颜色
+            scheme.textDark = '#333333';
+            scheme.textLight = '#ffffff';
+            scheme.border = '#dddddd';
+            scheme.background = '#ffffff';
+            scheme.cardBg = '#f8f9fa';
+            scheme.hover = '#e9ecef';
+
+            return scheme;
+        }
+
+        // 获取对比度因子
+        function getContrastFactor(level) {
+            switch(level) {
+                case 'low': return 0.5;
+                case 'medium': return 1;
+                case 'high': return 1.5;
+                default: return 1;
+            }
+        }
+
+        // 获取方案名称
+        function getSchemeName(type) {
             const names = {
-                'complementary': '互补色',
-                'analogous': '邻近色',
-                'triadic': '三元色',
-                'monochromatic': '单色系',
-                'tetradic': '四元色',
+                'analogous': '邻近色系',
+                'complementary': '互补色系', 
+                'triadic': '三角色系',
+                'tetradic': '四角色系',
+                'monochromatic': '单色渐变',
+                'split-complementary': '分裂互补',
+                'square': '方形配色',
                 'custom': '自定义'
             };
-            return names[strategy] || strategy;
+            return names[type] || '自定义';
         }
-        
-        // 获取对比度级别名称
-        function getContrastLevelName(level) {
-            const names = {
-                'low': '低对比度',
-                'medium': '中对比度',
-                'high': '高对比度',
-                'wcag_aa': 'WCAG AA (4.5:1)',
-                'wcag_aaa': 'WCAG AAA (7:1)'
-            };
-            return names[level] || level;
-        }
-        
-        // 复制到剪贴板
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).catch(err => {
-                // 降级方案
-                const textArea = document.createElement('textarea');
-                textArea.value = text;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
+
+        // 显示配色方案
+        function displayColorScheme(scheme) {
+            const container = document.getElementById('colorGrid');
+            container.innerHTML = '';
+
+            const colorItems = [
+                { name: '主色调', key: 'primary', value: scheme.primary },
+                { name: '辅助色1', key: 'secondary1', value: scheme.secondary1 },
+                { name: '辅助色2', key: 'secondary2', value: scheme.secondary2 },
+                { name: scheme.accent ? '强调色' : '文字色', key: scheme.accent ? 'accent' : 'textDark', value: scheme.accent || scheme.textDark },
+                { name: '文字色', key: 'textDark', value: scheme.textDark },
+                { name: '浅色文字', key: 'textLight', value: scheme.textLight },
+                { name: '边框色', key: 'border', value: scheme.border },
+                { name: '背景色', key: 'background', value: scheme.background }
+            ].filter(item => item.value); // 过滤掉undefined的项
+
+            colorItems.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'color-card';
+                card.innerHTML = `
+                    <h3>${item.name}</h3>
+                    <div class="color-item">
+                        <div class="color-preview" style="background-color: ${item.value};" 
+                             onclick="copyToClipboard('${item.value}')"
+                             title="点击复制颜色值"></div>
+                        <div class="color-info">
+                            <div class="color-name">${item.name}</div>
+                            <div class="color-value">${item.value}</div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
             });
+
+            // 添加渐变展示
+            const gradientCard = document.createElement('div');
+            gradientCard.className = 'color-card';
+            gradientCard.innerHTML = `
+                <h3>渐变效果</h3>
+                <div class="color-item">
+                    <div class="color-preview" style="background: linear-gradient(135deg, ${scheme.primary} 0%, ${scheme.secondary1 || scheme.primary} 100%);"></div>
+                    <div class="color-info">
+                        <div class="color-name">主渐变</div>
+                        <div class="color-value">从 ${scheme.primary} 到 ${scheme.secondary1 || scheme.primary}</div>
+                    </div>
+                </div>
+                <div class="color-item">
+                    <div class="color-preview" style="background: linear-gradient(45deg, ${scheme.secondary1 || scheme.primary} 0%, ${scheme.secondary2 || scheme.secondary1 || scheme.primary} 100%);"></div>
+                    <div class="color-info">
+                        <div class="color-name">辅助渐变</div>
+                        <div class="color-value">从 ${scheme.secondary1 || scheme.primary} 到 ${scheme.secondary2 || scheme.secondary1 || scheme.primary}</div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(gradientCard);
         }
-        
-        // 显示通知
-        function showNotification(message) {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.classList.add('show');
+
+        // 更新示例
+        function updateExamples(scheme) {
+            document.getElementById('primaryBtn').style.background = scheme.primary;
+            document.getElementById('secondaryBtn').style.background = scheme.secondary1 || scheme.primary;
+            document.getElementById('accentBtn').style.background = scheme.accent || scheme.secondary2 || scheme.primary;
+
+            document.getElementById('primaryGradient').style.background = 
+                `linear-gradient(135deg, ${scheme.primary} 0%, ${scheme.secondary1 || scheme.primary} 100%)`;
+            document.getElementById('accentGradient').style.background = 
+                `linear-gradient(45deg, ${scheme.secondary1 || scheme.primary} 0%, ${scheme.secondary2 || scheme.secondary1 || scheme.primary} 100%)`;
+            document.getElementById('textGradient').style.background = 
+                `linear-gradient(90deg, ${scheme.textDark} 0%, ${scheme.primary} 100%)`;
+
+            document.getElementById('exampleCard1').style.background = scheme.background;
+            document.getElementById('exampleCard1').style.color = scheme.textDark;
+            document.getElementById('exampleCard1').style.borderColor = scheme.border;
             
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 2000);
+            document.getElementById('exampleCard2').style.background = scheme.cardBg;
+            document.getElementById('exampleCard2').style.color = scheme.textDark;
+            document.getElementById('exampleCard2').style.borderColor = scheme.border;
         }
-        
-        // 验证颜色格式
-        function isValidColor(color) {
-            const s = new Option().style;
-            s.color = color;
-            return s.color !== '';
-        }
-        
-        // HSL转HEX
-        function hslToHex(h, s, l) {
-            h /= 360;
-            s /= 100;
-            l /= 100;
-            
-            let r, g, b;
-            
-            if (s === 0) {
-                r = g = b = l;
-            } else {
-                const hue2rgb = (p, q, t) => {
-                    if (t < 0) t += 1;
-                    if (t > 1) t -= 1;
-                    if (t < 1/6) return p + (q - p) * 6 * t;
-                    if (t < 1/2) return q;
-                    if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
-                    return p;
-                };
-                
-                const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-                const p = 2 * l - q;
-                
-                r = hue2rgb(p, q, h + 1/3);
-                g = hue2rgb(p, q, h);
-                b = hue2rgb(p, q, h - 1/3);
-            }
-            
-            const toHex = x => {
-                const hex = Math.round(x * 255).toString(16);
-                return hex.length === 1 ? '0' + hex : hex;
-            };
-            
-            return `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
-        }
-        
-        // HEX转HSL
+
+        // 颜色转换函数
         function hexToHsl(hex) {
             const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-            if (!result) return { h: 0, s: 0, l: 0 };
+            if (!result) return [0, 0, 0];
             
-            let r = parseInt(result[1], 16);
-            let g = parseInt(result[2], 16);
-            let b = parseInt(result[3], 16);
-            
-            r /= 255;
-            g /= 255;
-            b /= 255;
-            
-            const max = Math.max(r, g, b);
-            const min = Math.min(r, g, b);
+            let r = parseInt(result[1], 16) / 255;
+            let g = parseInt(result[2], 16) / 255;
+            let b = parseInt(result[3], 16) / 255;
+
+            let max = Math.max(r, g, b), min = Math.min(r, g, b);
             let h, s, l = (max + min) / 2;
-            
+
             if (max === min) {
-                h = s = 0; // achromatic
+                h = s = 0;
             } else {
-                const d = max - min;
+                let d = max - min;
                 s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-                
                 switch (max) {
                     case r: h = (g - b) / d + (g < b ? 6 : 0); break;
                     case g: h = (b - r) / d + 2; break;
                     case b: h = (r - g) / d + 4; break;
                 }
-                
-                h = Math.round(h * 60);
+                h /= 6;
             }
-            
-            return {
-                h: h,
-                s: Math.round(s * 100),
-                l: Math.round(l * 100)
-            };
+
+            return [Math.round(h * 360), Math.round(s * 100), Math.round(l * 100)];
         }
-        
-        // HSL转RGB
-        function hslToRgb(h, s, l) {
+
+        function hslToHex(h, s, l) {
             h /= 360;
             s /= 100;
             l /= 100;
-            
+
             let r, g, b;
-            
+
             if (s === 0) {
                 r = g = b = l;
             } else {
@@ -1077,24 +744,81 @@ CSS变量使用方式:
                     if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
                     return p;
                 };
-                
+
                 const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
                 const p = 2 * l - q;
-                
                 r = hue2rgb(p, q, h + 1/3);
                 g = hue2rgb(p, q, h);
                 b = hue2rgb(p, q, h - 1/3);
             }
-            
-            return {
-                r: Math.round(r * 255),
-                g: Math.round(g * 255),
-                b: Math.round(b * 255)
+
+            const toHex = x => {
+                const hex = Math.round(x * 255).toString(16);
+                return hex.length === 1 ? '0' + hex : hex;
             };
+
+            return `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
         }
-        
-        // 初始化应用
-        window.onload = init;
+
+        // 调整亮度
+        function adjustLightness(hex, amount) {
+            const [h, s, l] = hexToHsl(hex);
+            const newL = Math.max(0, Math.min(100, l + amount));
+            return hslToHex(h, s, newL);
+        }
+
+        // 获取互补色
+        function getComplementaryColor(hex) {
+            const [h, s, l] = hexToHsl(hex);
+            return hslToHex((h + 180) % 360, s, l);
+        }
+
+        // 复制到剪贴板
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showNotification(`已复制: ${text}`);
+            }).catch(err => {
+                console.error('复制失败:', err);
+            });
+        }
+
+        // 复制当前方案
+        function copyCurrentScheme() {
+            const schemeType = document.getElementById('schemeType').value;
+            const contrastLevel = document.getElementById('contrastLevel').value;
+            const scheme = generateColorScheme(currentMainColor, schemeType, contrastLevel);
+            const schemeString = JSON.stringify(scheme, null, 2);
+            copyToClipboard(schemeString);
+        }
+
+        // 导出配色方案
+        function exportScheme() {
+            const schemeType = document.getElementById('schemeType').value;
+            const contrastLevel = document.getElementById('contrastLevel').value;
+            const scheme = generateColorScheme(currentMainColor, schemeType, contrastLevel);
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(scheme, null, 2));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", `配色方案_${currentMainColor}_${Date.now()}.json`);
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
+        // 显示通知
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.className = 'notification';
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', initSystem);
     </script>
 </body>
 </html>
